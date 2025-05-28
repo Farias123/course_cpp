@@ -14,12 +14,13 @@ class floating_solid_solver{
         double x0, y0, z0, v_y0;
         double simulation_time, dt;
         double width, length, height, h_water, cube_mass;
+        string header;
 
         floating_solid_solver(double x0, double y0, double z0, double v_y0, double simulation_time, double dt, 
                               double width, double length, double height, double h_water, double cube_mass)
                               : y0(y0), v_y0(v_y0), simulation_time(simulation_time), dt(dt),
                                 width(width), length(length), height(height), h_water(h_water), cube_mass(cube_mass){
-                                    string header = "dt = " + to_string(dt) + "; x0 = " + to_string(x0) + "; z0 = " + 
+                                    header = "dt = " + to_string(dt) + "; x0 = " + to_string(x0) + "; z0 = " + 
                                     to_string(z0) + "; h_water = " + to_string(h_water) + "; cube_width = " + 
                                     to_string(width) + "; cube_length = " + to_string(length) + "; cube_height = " + 
                                     to_string(height) + "; cube_mass = " + to_string(cube_mass) + ";";
@@ -34,6 +35,7 @@ class floating_solid_solver{
             double c2 = v_y0/omega;
 
             ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
+            analytical_solution_file << header << endl;
 
             for(int i = 0; i < steps; i += 1){
                 t = i/60.0;
@@ -52,7 +54,7 @@ class floating_solid_solver{
             vy_list[0] = v_y0;
 
             ofstream numerical_solution_file("./y_positions_calculated/numerical_solution.txt");
-
+            numerical_solution_file << header << endl;
             numerical_solution_file << y0 << endl;
 
             for(int i = 1; i < steps; i += 1){
