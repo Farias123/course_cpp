@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <string>
 #include <array>
@@ -32,45 +33,51 @@ class floating_solid_solver{
             double c1 = y0 + cube_mass/(fluid_density*length*width) - h_water - height/2.0;
             double c2 = v_y0/omega;
 
+            ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
+
             for(int i = 0; i < steps; i += 1){
                 t = i/60.0;
                 y = c1*cos(omega*t) + c2*sin(omega*t) + h_water + height/2.0 - cube_mass/(fluid_density*length*width);
-                cout << y << endl;
+                analytical_solution_file << y << endl;
             }
+            analytical_solution_file.close();
 
         }
 
         void solve_numerical(){
             int steps = simulation_time*60; //60 fps
-            double r[steps][2];
+            double y_list[steps], vy_list[steps];
             array<double, 2> k1, k2, k3, k4, temp_derivative;
-            r[0][0] = y0;
-            r[0][1] = v_y0;
-            cout << r[0][0] << endl;
+            y_list[0] = y0;
+            vy_list[0] = v_y0;
+
+            ofstream numerical_solution_file("./y_positions_calculated/numerical_solution.txt");
+
+            numerical_solution_file << y0 << endl;
 
             for(int i = 1; i < steps; i += 1){
-                temp_derivative = f_y({r[i-1][0], r[i-1][1]});
+                temp_derivative = f_y(y_list[i-1], vy_list[i-1]);
                 k1 = {dt*temp_derivative[0], dt*temp_derivative[1]};
 
-                temp_derivative = f_y({r[i-1][0] + k1[0]/2.0, r[i-1][1] + k1[1]/2.0});
+                temp_derivative = f_y(y_list[i-1] + k1[0]/2.0, vy_list[i-1] + k1[1]/2.0);
                 k2 = {dt*temp_derivative[0], dt*temp_derivative[1]};
 
-                temp_derivative = f_y({r[i-1][0] + k2[0]/2.0, r[i-1][1] + k2[1]/2.0});
+                temp_derivative = f_y(y_list[i-1] + k2[0]/2.0, vy_list[i-1] + k2[1]/2.0);
                 k3 = {dt*temp_derivative[0], dt*temp_derivative[1]};
                 
-                temp_derivative = f_y({r[i-1][0] + k3[0], r[i-1][1] + k3[1]});
+                temp_derivative = f_y(y_list[i-1] + k3[0], vy_list[i-1] + k3[1]);
                 k4 = {dt*temp_derivative[0], dt*temp_derivative[1]};
 
-                r[i][0] = r[i-1][0] + 1.0/6.0*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
-                r[i][1] = r[i-1][1] + 1.0/6.0*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
-                cout << r[i][0] << endl;
+                y_list[i] = y_list[i-1] + 1.0/6.0*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
+                vy_list[i] = vy_list[i-1] + 1.0/6.0*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
+                numerical_solution_file << y_list[i] << endl;
             }
+            numerical_solution_file.close();
 
         }
 
-        array<double, 2> f_y(array<double, 2> ri){
+        array<double, 2> f_y(double y, double vy){
             // returns derivative of input
-            double y = ri[0], vy = ri[1];
             
             double fluid_volume_displaced = length*width*(h_water + height/2.0 - y);
             double ay = fluid_density*gravity_acceleration*fluid_volume_displaced/cube_mass - gravity_acceleration;
