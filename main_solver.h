@@ -16,6 +16,7 @@ class floating_solid_solver{
         double width, length, height, h_water, cube_mass;
         string header;
 
+        // TODO cronometrar cálculos
         floating_solid_solver(double x0, double y0, double z0, double v_y0, double simulation_time, double dt, 
                               double width, double length, double height, double h_water, double cube_mass)
                               : y0(y0), v_y0(v_y0), simulation_time(simulation_time), dt(dt),
@@ -23,7 +24,7 @@ class floating_solid_solver{
                                     header = "dt = " + to_string(dt) + "; x0 = " + to_string(x0) + "; z0 = " + 
                                     to_string(z0) + "; h_water = " + to_string(h_water) + "; cube_width = " + 
                                     to_string(width) + "; cube_length = " + to_string(length) + "; cube_height = " + 
-                                    to_string(height) + "; cube_mass = " + to_string(cube_mass) + ";";
+                                    to_string(height) + "; cube_mass = " + to_string(cube_mass);
                                 }
 
         void solve_analytical(){
@@ -40,7 +41,11 @@ class floating_solid_solver{
             for(int i = 0; i < steps; i += 1){
                 t = i/60.0;
                 y = c1*cos(omega*t) + c2*sin(omega*t) + h_water + height/2.0 - cube_mass/(fluid_density*length*width);
-                analytical_solution_file << y << endl;
+                analytical_solution_file << y;
+
+                if( i != steps - 1){
+                    analytical_solution_file << endl;
+                }
             }
             analytical_solution_file.close();
 
@@ -72,7 +77,11 @@ class floating_solid_solver{
 
                 y_list[i] = y_list[i-1] + 1.0/6.0*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
                 vy_list[i] = vy_list[i-1] + 1.0/6.0*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
-                numerical_solution_file << y_list[i] << endl;
+                numerical_solution_file << y_list[i];
+
+                if( i != steps - 1){
+                    numerical_solution_file << endl;
+                }
             }
             numerical_solution_file.close();
 
