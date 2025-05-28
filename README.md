@@ -1,5 +1,6 @@
 # floating_solid_simulation
-[Gravação de tela de 2025-05-28 00-35-44.mp4](../../../../V%C3%ADdeos/Grava%C3%A7%C3%B5es%20de%20tela/Grava%C3%A7%C3%A3o%20de%20tela%20de%202025-05-28%2000-35-44.mp4)
+[floating_solid.webm](https://github.com/user-attachments/assets/6415bb7f-1713-4d7a-ab18-2301a5ddcd78)
+
 
 ## PT - BR
 Simulação de um cubo flutuando na água feita utilizando C++ e Python.
@@ -29,21 +30,21 @@ que já é suficiente para realizar o cálculo numérico do problema:
 $$ a_y = \frac{\rho \cdot g \cdot V_d}{m} - g$$
 
 Para resolver analiticamente, é preciso descrever o volume deslocado em função do y do centro do sólido. Sabendo que a 
-altura da base do sólido é igual à altura do centro do sólido menos a metade da altura do sólido ($y_{base} = y - h/2$) 
+altura da base do sólido é igual à altura do centro do sólido menos a metade da altura do sólido ($y_{base} = y - \frac{h}{2}$) 
 e que $V_d = c \cdot l \cdot (h_{water} - y_{base})$:
 
-$$ y'' = \frac{\rho \cdot g \cdot c \cdot l}{m} \cdot (h_{water} + h/2) - \frac{\rho \cdot g \cdot c \cdot l \cdot y}{m} - g$$
+$$ y'' = \frac{\rho \cdot g \cdot c \cdot l}{m} \cdot (h_{water} + \frac{h}{2}) - \frac{\rho \cdot g \cdot c \cdot l \cdot y}{m} - g$$
 
 A partir disso assumimos que a solução da EDO é a soma da solução homogênea com uma solução particular. Para a homogênea
 teremos que $$y'' = - \frac{\rho \cdot g \cdot c \cdot l \cdot y}{m} \implies y_h = 
 C_1 \cdot \cos \left(\sqrt{\frac{\rho \cdot g \cdot c \cdot l}{m}}t \right) + C_2 \cdot \sin\left(\sqrt{\frac{\rho \cdot g \cdot c \cdot l}{m}}t \right)$$
 
 A solução particular se dá ao assumir que y é constante, assim: 
-$$y_p = h_{water} + h/2 - \frac{m}{\rho \cdot c \cdot l}$$
+$$y_p = h_{water} + \frac{h}{2} - \frac{m}{\rho \cdot c \cdot l}$$
 
 Por fim, são aplicadas as condições iniciais ($y(t=0) = y_0, y'(t=0) = vy_0$) e são encontrados os valores das constantes 
 $C_1$ e $C_2$:
 
-$$C_1 = y_0 + \frac{m}{\rho \cdot c \cdot l} - h_{water} - h/2$$
+$$C_1 = y_0 + \frac{m}{\rho \cdot c \cdot l} - h_{water} - \frac{h}{2}$$ <br>
 $$C_2 = \frac{vy_0}{\omega}$$
 Onde: $\omega = \sqrt{\frac{\rho \cdot c \cdot g \cdot l}{m}}$
