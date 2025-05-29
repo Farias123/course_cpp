@@ -3,8 +3,10 @@
 #include <cmath>
 #include <string>
 #include <array>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 const double gravity_acceleration = 9.81;
 double fluid_density = 997.0474; // kg/m^3 (water)
@@ -16,7 +18,6 @@ class floating_solid_solver{
         double width, length, height, h_water, cube_mass;
         string header;
 
-        // TODO cronometrar cálculos
         floating_solid_solver(double x0, double y0, double z0, double v_y0, double simulation_time, double dt, 
                               double width, double length, double height, double h_water, double cube_mass)
                               : y0(y0), v_y0(v_y0), simulation_time(simulation_time), dt(dt),
@@ -28,39 +29,48 @@ class floating_solid_solver{
                                 }
 
         void solve_analytical(){
+            auto start = high_resolution_clock::now();
+
             int steps = simulation_time*60; //60 fps
             double t, y; //time in seconds, y coordinates in meters
+            string y_points_string = "";
 
             double omega = sqrt(fluid_density*gravity_acceleration*length*width/cube_mass);
             double c1 = y0 + cube_mass/(fluid_density*length*width) - h_water - height/2.0;
             double c2 = v_y0/omega;
 
             ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
-            analytical_solution_file << header << endl;
 
             for(int i = 0; i < steps; i += 1){
                 t = i/60.0;
                 y = c1*cos(omega*t) + c2*sin(omega*t) + h_water + height/2.0 - cube_mass/(fluid_density*length*width);
-                analytical_solution_file << y;
-
+                y_points_string += to_string(y);
                 if( i != steps - 1){
-                    analytical_solution_file << endl;
+                    y_points_string += "\n";
                 }
             }
+
+            auto end = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(end - start);
+            
+            analytical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; ";
+            analytical_solution_file << header << endl << y_points_string;
             analytical_solution_file.close();
 
         }
 
         void solve_numerical(){
+            auto start = high_resolution_clock::now();
+
             int steps = simulation_time*60; //60 fps
             double y_list[steps], vy_list[steps];
             array<double, 2> k1, k2, k3, k4, temp_derivative;
+
             y_list[0] = y0;
             vy_list[0] = v_y0;
+            string y_points_string = "";
 
             ofstream numerical_solution_file("./y_positions_calculated/numerical_solution.txt");
-            numerical_solution_file << header << endl;
-            numerical_solution_file << y0 << endl;
 
             for(int i = 1; i < steps; i += 1){
                 temp_derivative = f_y(y_list[i-1], vy_list[i-1]);
@@ -77,12 +87,18 @@ class floating_solid_solver{
 
                 y_list[i] = y_list[i-1] + 1.0/6.0*(k1[0] + 2*k2[0] + 2*k3[0] + k4[0]);
                 vy_list[i] = vy_list[i-1] + 1.0/6.0*(k1[1] + 2*k2[1] + 2*k3[1] + k4[1]);
-                numerical_solution_file << y_list[i];
+                y_points_string += to_string(y_list[i]);
 
                 if( i != steps - 1){
-                    numerical_solution_file << endl;
+                    y_points_string += "\n";
                 }
             }
+
+            auto end = high_resolution_clock::now();
+            auto duration = duration_cast<microseconds>(end - start);
+            
+            numerical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; " 
+                                    << header << endl << to_string(y0) << endl << y_points_string;
             numerical_solution_file.close();
 
         }
