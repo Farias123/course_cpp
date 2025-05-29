@@ -107,10 +107,22 @@ class floating_solid_solver{
             // returns derivative of input
             
             double fluid_volume_displaced = length*width*(h_water + height/2.0 - y);
+            fluid_volume_displaced = fix_volume_displaced(fluid_volume_displaced);
             double ay = fluid_density*gravity_acceleration*fluid_volume_displaced/cube_mass - gravity_acceleration;
             // ma = E - P -> a = d*g*V/m - g
             
             return {vy, ay};
+        }
+
+        double fix_volume_displaced(double volume_displaced){
+            //correction for two cases(1- solid completely under the water, 2- solid completely out of water)
+            if(volume_displaced > width*length*height){
+                volume_displaced = width*length*height;
+            }
+            if(volume_displaced < 0){
+                volume_displaced = 0;
+            }
+            return volume_displaced;
         }
 };
 
