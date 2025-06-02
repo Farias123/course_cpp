@@ -15,17 +15,17 @@ class floating_solid_solver{
     public:
         double x0, y0, z0, v_y0;
         double simulation_time, dt;
-        double width, length, height, h_water, cube_mass;
+        double width, length, height, cube_mass;
         string header;
 
         floating_solid_solver(double x0, double y0, double z0, double v_y0, double simulation_time, double dt, 
-                              double width, double length, double height, double h_water, double cube_mass)
+                              double width, double length, double height, double cube_mass)
                               : y0(y0), v_y0(v_y0), simulation_time(simulation_time), dt(dt),
-                                width(width), length(length), height(height), h_water(h_water), cube_mass(cube_mass){
+                                width(width), length(length), height(height), cube_mass(cube_mass){
                                     header = "dt = " + to_string(dt) + "; x0 = " + to_string(x0) + "; z0 = " + 
-                                    to_string(z0) + "; h_water = " + to_string(h_water) + "; cube_width = " + 
-                                    to_string(width) + "; cube_length = " + to_string(length) + "; cube_height = " + 
-                                    to_string(height) + "; cube_mass = " + to_string(cube_mass);
+                                    to_string(z0) + "; cube_width = " + to_string(width) + "; cube_length = " +  
+                                    to_string(length) + "; cube_height = " + to_string(height) + "; cube_mass = " 
+                                    + to_string(cube_mass);
                                 }
 
         void solve_analytical(){
@@ -36,14 +36,14 @@ class floating_solid_solver{
             string y_points_string = "";
 
             double omega = sqrt(fluid_density*gravity_acceleration*length*width/cube_mass);
-            double c1 = y0 + cube_mass/(fluid_density*length*width) - h_water - height/2.0;
+            double c1 = y0 + cube_mass/(fluid_density*length*width) - height/2.0;
             double c2 = v_y0/omega;
 
             ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
 
             for(int i = 0; i < steps; i += 1){
                 t = i/60.0;
-                y = c1*cos(omega*t) + c2*sin(omega*t) + h_water + height/2.0 - cube_mass/(fluid_density*length*width);
+                y = c1*cos(omega*t) + c2*sin(omega*t) + height/2.0 - cube_mass/(fluid_density*length*width);
                 y_points_string += to_string(y);
                 if( i != steps - 1){
                     y_points_string += "\n";
@@ -106,7 +106,7 @@ class floating_solid_solver{
         array<double, 2> f_y(double y, double vy){
             // returns derivative of input
             
-            double fluid_volume_displaced = length*width*(h_water + height/2.0 - y);
+            double fluid_volume_displaced = length*width*(height/2.0 - y);
             fluid_volume_displaced = fix_volume_displaced(fluid_volume_displaced);
             double ay = fluid_density*gravity_acceleration*fluid_volume_displaced/cube_mass - gravity_acceleration;
             // ma = E - P -> a = d*g*V/m - g
