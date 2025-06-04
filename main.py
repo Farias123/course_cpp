@@ -44,8 +44,8 @@ def execute_cpp_calculations():
 
 def choose_data_file():
     print("""The analytical method has a perfect solution but should only be used for simple cases (when the solid is 
-    never completely under or out of the water), whereas the numerical method is an approximation of the solution that 
-    works for more complex cases but diverges if the interval dt is not small enough.""")
+never completely under or out of the water), whereas the numerical method is an approximation of the solution that 
+works for more complex cases but diverges if the interval dt is not small enough.""")
 
     while True:
         print("You want to watch the numerical(1) or analytical(2) solution?")
