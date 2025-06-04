@@ -31,7 +31,7 @@ class floating_solid_solver{
         void solve_analytical(){
             auto start = high_resolution_clock::now();
 
-            int steps = simulation_time*60; //60 fps
+            int steps = simulation_time/dt;
             double t, y; //time in seconds, y coordinates in meters
             string y_points_string = "";
 
@@ -62,7 +62,7 @@ class floating_solid_solver{
         void solve_numerical(){
             auto start = high_resolution_clock::now();
 
-            int steps = simulation_time*60; //60 fps
+            int steps = simulation_time/dt; //60 fps
             double y_list[steps], vy_list[steps];
             array<double, 2> k1, k2, k3, k4, temp_derivative;
 

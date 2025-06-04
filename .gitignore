@@ -3,3 +3,4 @@ venv
 .idea
 ./main
 ./__pycache__/
+./y_positions_calculated/
