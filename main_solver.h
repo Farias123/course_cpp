@@ -42,7 +42,7 @@ class floating_solid_solver{
             ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
 
             for(int i = 0; i < steps; i += 1){
-                t = i/60.0;
+                t = i*dt;
                 y = c1*cos(omega*t) + c2*sin(omega*t) + height/2.0 - cube_mass/(fluid_density*length*width);
                 y_points_string += to_string(y);
                 if( i != steps - 1){
@@ -62,7 +62,7 @@ class floating_solid_solver{
         void solve_numerical(){
             auto start = high_resolution_clock::now();
 
-            int steps = simulation_time/dt; //60 fps
+            int steps = simulation_time/dt;
             double y_list[steps], vy_list[steps];
             array<double, 2> k1, k2, k3, k4, temp_derivative;
 
