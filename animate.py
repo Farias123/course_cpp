@@ -21,7 +21,7 @@ def main(y_data_file):
     y_list = [float(x) for x in content[1:]]
 
 
-    water = box(pos=vector(0, - params.get("cube_height")*5/2, 0), length=50, height=params.get("cube_height")*5, width=50, color=color.blue, opacity=0.4)
+    water = box(pos=vector(0, - params.get("cube_height")*10000/2, 0), length=params.get("cube_length")*10000, height=params.get("cube_height")*10000, width=params.get("cube_width")*10000, color=color.blue, opacity=0.4)
     # water height -water_cube_height/2 in order for surface to be on h_water height
 
     solid = box(pos=vector(params.get("x0"), y_list[0], params.get("z0")), length=params.get("cube_length"),

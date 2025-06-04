@@ -31,7 +31,7 @@ class floating_solid_solver{
         void solve_analytical(){
             auto start = high_resolution_clock::now();
 
-            int steps = simulation_time*60; //60 fps
+            int steps = simulation_time/dt;
             double t, y; //time in seconds, y coordinates in meters
             string y_points_string = "";
 
@@ -42,7 +42,7 @@ class floating_solid_solver{
             ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
 
             for(int i = 0; i < steps; i += 1){
-                t = i/60.0;
+                t = i*dt;
                 y = c1*cos(omega*t) + c2*sin(omega*t) + height/2.0 - cube_mass/(fluid_density*length*width);
                 y_points_string += to_string(y);
                 if( i != steps - 1){
@@ -51,7 +51,7 @@ class floating_solid_solver{
             }
 
             auto end = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(end - start);
+            auto duration = duration_cast<milliseconds>(end - start);
             
             analytical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; ";
             analytical_solution_file << header << endl << y_points_string;
@@ -62,7 +62,7 @@ class floating_solid_solver{
         void solve_numerical(){
             auto start = high_resolution_clock::now();
 
-            int steps = simulation_time*60; //60 fps
+            int steps = simulation_time/dt;
             double y_list[steps], vy_list[steps];
             array<double, 2> k1, k2, k3, k4, temp_derivative;
 
@@ -95,7 +95,7 @@ class floating_solid_solver{
             }
 
             auto end = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(end - start);
+            auto duration = duration_cast<milliseconds>(end - start);
             
             numerical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; " 
                                     << header << endl << to_string(y0) << endl << y_points_string;

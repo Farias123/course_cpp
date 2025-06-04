@@ -2,4 +2,8 @@
 venv
 .idea
 ./main
-./__pycache__/
+main
+./__pycache__/*
+./y_positions_calculated/*
+__pycache__
+y_positions_calculated/*
