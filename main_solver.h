@@ -51,7 +51,7 @@ class floating_solid_solver{
             }
 
             auto end = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(end - start);
+            auto duration = duration_cast<milliseconds>(end - start);
             
             analytical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; ";
             analytical_solution_file << header << endl << y_points_string;
@@ -95,7 +95,7 @@ class floating_solid_solver{
             }
 
             auto end = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(end - start);
+            auto duration = duration_cast<milliseconds>(end - start);
             
             numerical_solution_file << "calculation_time(ms) = " + to_string(duration.count()) + "; " 
                                     << header << endl << to_string(y0) << endl << y_points_string;
