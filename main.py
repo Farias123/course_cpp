@@ -21,6 +21,26 @@ def full_process():
             break
 
 
+def execute_cpp_calculations():
+    print("Would you like to choose custom values for the simulation (y or n):")
+    user_input = input('>')
+
+    if str.lower(user_input) == 'y':
+        param_names = ["initial y", "initial y speed", "simulation time (in seconds)", "solid width",
+                       "solid length", "solid height", "cube mass", "dt"]
+        params = ["./main", "1"]
+
+        for param_name in param_names:
+            print(f"Enter {param_name}:")
+            param_entered = input()
+            params.append(param_entered)
+
+        output = subprocess.run(params, capture_output=True, text=True)
+    else:
+        output = subprocess.run(["./main"], capture_output=True, text=True)
+
+    return output
+
 
 def choose_data_file():
     print("""The analytical method has a perfect solution and should be used for simple cases (when the solid is never
@@ -37,27 +57,6 @@ def choose_data_file():
             return "./y_positions_calculated/analytical_solution.txt"
 
         print("Not a valid choice")
-
-
-def execute_cpp_calculations():
-    print("Would you like to choose custom values for the simulation (y or n):")
-    user_input = input('>')
-
-    if str.lower(user_input) == 'y':
-        param_names = ["initial_x", "initial_y", "initial_z", "initial_y_speed", "simulation_time", "solid_width",
-                       "solid_length", "solid_height", "cube_mass", "dt"]
-        params = ["./main", "1"]
-
-        for param_name in param_names:
-            print(f"Enter {param_name}:")
-            param_entered = input()
-            params.append(param_entered)
-
-        output = subprocess.run(params, capture_output=True, text=True)
-    else:
-        output = subprocess.run(["./main"], capture_output=True, text=True)
-
-    return output
 
 
 if __name__ == "__main__":
