@@ -39,7 +39,7 @@ class floating_solid_solver{
             double c1 = y0 + cube_mass/(fluid_density*length*width) - height/2.0;
             double c2 = v_y0/omega;
 
-            ofstream analytical_solution_file("./y_positions_calculated/analytical_solution.txt");
+            ofstream analytical_solution_file("../../data/analytical_solution.txt");
 
             for(int i = 0; i < steps; i += 1){
                 t = i*dt;
@@ -70,7 +70,7 @@ class floating_solid_solver{
             vy_list[0] = v_y0;
             string y_points_string = "";
 
-            ofstream numerical_solution_file("./y_positions_calculated/numerical_solution.txt");
+            ofstream numerical_solution_file("../../data/numerical_solution.txt");
 
             for(int i = 1; i < steps; i += 1){
                 temp_derivative = f_y(y_list[i-1], vy_list[i-1]);

@@ -4,7 +4,7 @@ import animate
 
 def full_process():
     # TODO capture output
-    subprocess.run(["g++", "./main.cpp", "-o",  "main"], capture_output=True, text=True)
+    subprocess.run(["g++", "../cpp/main.cpp", "-o",  "main"], capture_output=True, text=True)
 
     while True:
         execute_cpp_calculations()
@@ -32,7 +32,7 @@ def execute_cpp_calculations():
 
         for param_name in param_names:
             print(f"Enter {param_name}:")
-            param_entered = input()
+            param_entered = input('>')
             params.append(param_entered)
 
         output = subprocess.run(params, capture_output=True, text=True)
@@ -52,10 +52,10 @@ works for more complex cases but diverges if the interval dt is not small enough
         user_input = int(input('>'))
 
         if user_input == 1:
-            return "./y_positions_calculated/numerical_solution.txt"
+            return "../../data/numerical_solution.txt"
 
         elif user_input == 2:
-            return "./y_positions_calculated/analytical_solution.txt"
+            return "../../data/analytical_solution.txt"
 
         print("Not a valid choice")
 

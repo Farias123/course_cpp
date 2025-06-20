@@ -1,5 +1,6 @@
 from time import sleep
-from vpython import box, vector, color, scene
+from vpython import box, vector, color, scene, canvas
+
 
 def parse_header(header):
     data = header.split(";")
@@ -11,7 +12,9 @@ def parse_header(header):
     return data_dict
 
 def main(y_data_file):
-    scene.background = color.white
+    mycanvas = canvas()
+    mycanvas.select()
+    mycanvas.background = color.white
 
     with open(y_data_file) as file:
         content = file.read().split("\n")
@@ -27,15 +30,17 @@ def main(y_data_file):
     solid = box(pos=vector(params.get("x0"), y_list[0], params.get("z0")), length=params.get("cube_length"),
                 height=params.get("cube_height"), width=params.get("cube_width"), color=color.red)
 
-    scene.center = vector(-5, 2, 5)
-    scene.forward = vector(-8.61595, -2.73272, 6.87733)
-    scene.range = 22.96683
+    mycanvas.center = vector(-5, 2, 5)
+    mycanvas.forward = vector(-8.61595, -2.73272, 6.87733)
+    mycanvas.range = 22.96683
     # TODO melhorar câmera
 
     dt = params.get("dt")
     for y in y_list:
         solid.pos.y = y
         sleep(dt)
+
+    mycanvas.visible = False
 
 if __name__ == "__main__":
     main("./y_positions_calculated/numerical_solution.txt")
